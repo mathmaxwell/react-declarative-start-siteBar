@@ -3,15 +3,30 @@ import App from './App'
 import { ThemeProvider } from '@mui/material'
 import THEME_DARK from './config/theme'
 import { LoaderProvider } from './hooks/useLoader'
-import { LangProvider } from './language/LangProvider'
+import { ModalProvider, sleep } from 'react-declarative'
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
-ReactDOM.render(
-	<LangProvider>
+import './i18n'
+
+const wrappedApp = (
+	<ModalProvider>
 		<LoaderProvider>
-			<ThemeProvider theme={THEME_DARK}>
-				<App />
-			</ThemeProvider>
+			<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='en-gb'>
+				<ThemeProvider theme={THEME_DARK}>
+					<App />
+				</ThemeProvider>
+			</LocalizationProvider>
 		</LoaderProvider>
-	</LangProvider>,
-	document.getElementById('root')
+	</ModalProvider>
 )
+
+const init = async () => {
+	// @ts-ignore
+	while (!window.Translate) {
+		await sleep(500)
+	}
+	ReactDOM.render(wrappedApp, document.getElementById('root'))
+}
+
+init()

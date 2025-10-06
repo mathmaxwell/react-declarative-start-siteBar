@@ -1,4 +1,4 @@
-const uz = {
+export const LOCALE: Record<string, string> = {
 	hello: 'Maktab autentifikatsiyasiga xush kelibsiz',
 	usernameLabel: 'Foydalanuvchi nomi', // Изменено 'ismi' на 'nomi' для 'username'
 	passwordLabel: 'Parol',
@@ -430,4 +430,3 @@ const uz = {
 	saveChangesNote:
 		'O‘zgarishlarni yo‘qotmaslik uchun o‘zgartirgandan so‘ng saqlab qo‘ying.',
 }
-export default uz

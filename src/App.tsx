@@ -1,4 +1,4 @@
-import { Scaffold2, Switch } from 'react-declarative'
+import { Scaffold2, Switch, useSearchState } from 'react-declarative'
 import './App.css'
 import history, { useRouteItem } from './helpers/history'
 import sidemenu from './config/siteMenu'
@@ -8,12 +8,12 @@ import scaffoldactions from './config/scaffoldmenu'
 import useLoader from './hooks/useLoader'
 import Loader from './pages/Loading/Loading'
 import UserInfo from './common/UserInfo'
-import { useLangStore } from './language/useTranslationStore'
+import { switchTheme, themes } from './config/theme'
 
 function App() {
-	const { t, setLang, lang } = useLangStore()
-	console.log(t.April)
-
+	const [_, setSearchState] = useSearchState<{ locale: string }>({
+		locale: 'uz',
+	})
 	const item = useRouteItem()
 	const { loader, setLoader } = useLoader()
 	return (
@@ -29,18 +29,36 @@ function App() {
 				history.push(sideMenuClickMap[path])
 			}}
 			onAction={path => {
-				const clickedAction = scaffoldactions.find(a => a.action === path)
-				if (clickedAction?.action === 'chooseLanguage') {
-					setLang(lang === 'ru' ? 'uz' : 'ru')
+				if (path === 'uzb') {
+					localStorage.setItem('lang', 'uz')
+					setSearchState(prevState => ({
+						...prevState,
+						locale: 'uz',
+					}))
+				} else if (path === 'rus') {
+					localStorage.setItem('lang', 'ru')
+					setSearchState(prevState => ({
+						...prevState,
+						locale: 'ru',
+					}))
+				} else if (path === 'eng') {
+					localStorage.setItem('lang', 'eng')
+					setSearchState(prevState => ({
+						...prevState,
+						locale: 'eng',
+					}))
+				} else if (themes[path as keyof typeof themes]) {
+					switchTheme(path as keyof typeof themes)
 				} else {
-					console.log('Неизвестное действие:', path)
+					console.log('не найдено', path)
 				}
+				setTimeout(() => {
+					window.location.reload()
+				}, 1000)
 			}}
-
-			// Loader={Loader}  говорит что не Loader не принимается в пропсах
 		>
 			<Switch
-				Loader={Loader} //можно ли дать компонент загрузки, а не пустой компонент?
+				Loader={Loader}
 				items={routes}
 				history={history}
 				onLoadStart={() => setLoader(true)}

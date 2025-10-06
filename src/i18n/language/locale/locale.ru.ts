@@ -1,4 +1,4 @@
-const ru = {
+export const LOCALE: Record<string, string> = {
 	hello: 'Добро пожаловать в систему школьной аутентификации',
 	usernameLabel: 'Имя пользователя',
 	passwordLabel: 'Пароль',
@@ -426,5 +426,3 @@ const ru = {
 	saveChangesNote: 'После изменения сохраните, чтобы не потерять изменения.',
 	confirmSave: 'Вы уверены, что хотите сохранить изменения?',
 }
-
-export default ru
